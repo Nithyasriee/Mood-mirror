@@ -1,13 +1,3 @@
-I see your GitHub repo 🎉 — nice work! Your project is pushed successfully 🚀
-
-Right now you’re missing only:
-
-### 1. **README.md**
-
-This explains what your project does, how to install, and how to run it.
-
-👉 Example `README.md` for your **Mood Mirror** project:
-
 ````markdown
 # Mood Mirror 🪞
 
