@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>MindLink - Social Media & Mental Health</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>MindLink</h1>
+      <p class="subtitle">AI-Powered Social Media Wellness Analyzer for Students</p>
+    </header>
+
+    <main class="grid">
+      <!-- LEFT: Inputs -->
+      <section class="card">
+        <h2>Enter recent posts</h2>
+        <form method="POST" id="analysisForm">
+          <textarea name="posts" placeholder="Paste student posts here, one per line..." rows="6">{{ request.form.posts or '' }}</textarea>
+
+          <h3>Daily usage (hours)</h3>
+          <div class="usage-grid">
+            <label>Instagram <input id="instagram" name="instagram" type="number" min="0" step="0.5" value="{{ usage_data['Instagram'] }}"></label>
+            <label>YouTube <input id="youtube" name="youtube" type="number" min="0" step="0.5" value="{{ usage_data['YouTube'] }}"></label>
+            <label>WhatsApp <input id="whatsapp" name="whatsapp" type="number" min="0" step="0.5" value="{{ usage_data['WhatsApp'] }}"></label>
+            <label>Others <input id="others" name="others" type="number" min="0" step="0.5" value="{{ usage_data['Others'] }}"></label>
+          </div>
+
+          <h3>Health & routine</h3>
+          <label>Sleep hours (avg) <input id="sleep_hours" name="sleep_hours" type="number" min="0" max="24" step="0.5" value="{{ sleep_hours or 7 }}"></label>
+          <label>Study hours (avg) <input id="study_hours" name="study_hours" type="number" min="0" max="24" step="0.5" value="{{ study_hours or 2 }}"></label>
+
+          <div class="form-row">
+            <button type="submit" class="btn">Analyze</button>
+            <button type="button" id="previewBtn" class="btn ghost">Preview Chart</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- RIGHT: Dashboard -->
+      <section class="card dashboard">
+        {% if results %}
+          <div class="summary">
+            <div class="score-card">
+              <h3>Wellness Score</h3>
+              <div class="score">{{ wellness }}%</div>
+              <div class="badge {{ badge_class }}">{{ badge }}</div>
+              <div class="progress"><div class="progress-bar" style="width: {{ wellness }}%"></div></div>
+            </div>
+
+            <div class="chart-card">
+              <h3>Daily Social Usage</h3>
+              <canvas id="usageChart" width="400" height="220"></canvas>
+            </div>
+          </div>
+
+          <h3>Post Analysis</h3>
+          <div class="results-list">
+            <table>
+              <thead><tr><th>Post</th><th>Mood</th><th>Polarity</th></tr></thead>
+              <tbody>
+                {% for r in results %}
+                <tr>
+                  <td>{{ r.post }}</td>
+                  <td>{{ r.mood }}</td>
+                  <td>{{ r.polarity }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Recommended Actions</h3>
+          <ul class="tips">
+            {% for t in tips %}
+              <li>{{ t }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="hero">
+            <p>Enter sample posts and usage on the left then hit <strong>Analyze</strong>. Use <em>Preview Chart</em> to see the chart update live.</p>
+          </div>
+        {% endif %}
+      </section>
+    </main>
+
+    <footer>
+      <p>MindLink • Prototype for NCSRC TN Hackathon 2025</p>
+    </footer>
+  </div>
+
+<script>
+// Seed chart with backend values (if provided), else zeros
+const labels = {{ usage_data.keys() | list | tojson }};
+const dataVals = {{ usage_data.values() | list | tojson }};
+
+// Create chart (will be created only if canvas exists)
+let usageChart = null;
+function createChart(values) {
+  const ctx = document.getElementById('usageChart');
+  if (!ctx) return;
+  if (usageChart) usageChart.destroy();
+  usageChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Hours per day',
+        data: values,
+        backgroundColor: ['#667eea', '#764ba2', '#ff9f1c', '#2ec4b6']
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: { y: { beginAtZero: true, suggestedMax: 12 } }
+    }
+  });
+}
+
+// if results exist on render, draw chart with server data
+createChart(dataVals);
+
+// live preview button: read numbers from inputs and update chart
+document.getElementById('previewBtn').addEventListener('click', function(){
+  const vals = [
+    parseFloat(document.getElementById('instagram').value) || 0,
+    parseFloat(document.getElementById('youtube').value) || 0,
+    parseFloat(document.getElementById('whatsapp').value) || 0,
+    parseFloat(document.getElementById('others').value) || 0
+  ];
+  createChart(vals);
+});
+</script>
+</body>
+</html>

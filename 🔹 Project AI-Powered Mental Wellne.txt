@@ -1,0 +1,182 @@
+🔹 Project: AI-Powered Mental Wellness Analyzer
+1. What is the Project About?
+
+This is a web application that analyzes how your social media activity (Instagram, YouTube, WhatsApp, etc.) affects your mental wellness.
+
+The app takes user input about their daily digital usage.
+
+It applies sentiment/emotion mapping to categorize moods (positive / neutral / negative).
+
+It then shows visualizations (charts) of how each platform impacts mood.
+
+Finally, it provides personalized recommendations for better mental wellness.
+
+⚡ In simple words: It’s like a “Mood Mirror” for your online life.
+
+2. Why Did We Build It?
+
+Problem: People spend 4–6 hours daily on social media → this directly impacts mental health (anxiety, FOMO, burnout).
+
+Gap: There’s no simple tool that shows how specific platforms affect your emotions in real-time.
+
+Hackathon Relevance: It blends AI + health + visualization into a single, impactful project.
+
+👉 Our goal is to make people aware of their digital habits and empower them to take control of their emotional wellbeing.
+
+3. Purpose of the Project
+
+Awareness → Users realize how Instagram reels, YouTube videos, or WhatsApp chats affect them differently.
+
+Prevention → Negative patterns (too much scrolling, late-night usage) can be spotted early.
+
+Empowerment → Personalized recommendations guide users to fix unhealthy habits.
+
+Scalability → Can evolve into a mental health companion app.
+
+4. How Does the Project Work?
+
+Let’s break it step by step:
+
+🔸 Step 1: Input
+
+The user fills a form in the web app.
+Example:
+
+Instagram → “Scrolled reels for 2 hrs”
+
+YouTube → “Watched motivational videos”
+
+WhatsApp → “Chatted with friends”
+
+🔸 Step 2: Processing
+
+We use sentiment mapping:
+
+“Motivational” → Positive
+
+“Scrolled aimlessly” → Negative
+
+“Friends chat” → Positive
+
+For hackathon demo: mapping is rule-based (dictionary of positive/negative keywords).
+
+In future: can integrate ML/NLP model (HuggingFace Transformers, Vader Sentiment).
+
+🔸 Step 3: Output
+
+Mood displayed on screen (cards: Green = Positive, Yellow = Neutral, Red = Negative).
+
+A chart (bar/pie/line) shows mood distribution across platforms.
+
+Recommendations shown below → e.g.,
+
+Negative mood → “Take a walk, listen to calming music”
+
+Neutral → “Stay consistent, avoid distractions”
+
+Positive → “Keep journaling, maintain balance”
+
+5. How the Code Works
+⚙️ Backend (Python Flask / Django or simple script)
+
+Input from user → captured in form.
+
+Text processed → keywords checked in a dictionary.
+
+Assigns mood scores: positive = +1, negative = -1, neutral = 0.
+
+Prepares result dictionary like:
+
+results = {
+    "Instagram": "Negative",
+    "YouTube": "Positive",
+    "WhatsApp": "Positive"
+}
+
+
+Sends this results to HTML template.
+
+🖥️ Frontend (HTML + CSS + Chart.js)
+
+Uses Jinja template ({% if results %}) → results shown only after analysis.
+
+Chart.js renders dynamic graph using passed Python data.
+
+CSS ensures clean, modern look (cards, gradients, responsive design).
+
+🔄 Flow Example
+
+User types → “Scrolled reels aimlessly.”
+
+Code detects → “aimlessly” → Negative.
+
+Backend sends → {Instagram: Negative}.
+
+Frontend shows → Red Card + Graph with Negative bar.
+
+Suggestion shown → “Take a break, avoid endless scrolling.”
+
+6. Uses of the Project
+
+Students → Track stress from online classes + social usage.
+
+Professionals → Detect burnout from long work/scrolling.
+
+Parents → Monitor children’s digital wellness.
+
+Healthcare Startups → Integrate as mental wellness add-on.
+
+7. Hackathon Alignment
+
+AI/ML → Sentiment analysis (currently rule-based, scalable to ML).
+
+Health & Wellness → Promotes mental wellness.
+
+Data Visualization → Interactive charts.
+
+Tech for Good → Accessible web tool for everyone.
+
+Scalability → APIs, mobile app, AI-based journaling.
+
+8. Every Inch You Can Explain
+🔹 Input Form
+
+Why simple? → Judge-friendly, quick demo.
+
+Why customizable? → Each user gives unique usage.
+
+🔹 Sentiment Mapping
+
+Rule-based → ensures fast demo (no heavy ML).
+
+Easy to extend → can later plug in real ML model.
+
+🔹 Results Cards
+
+Color-coded → helps users instantly understand mood.
+
+Accessible → green/yellow/red universal indicators.
+
+🔹 Charts
+
+Bar chart → shows distribution of moods.
+
+Pie chart → shows percentage of moods.
+
+Future → line chart for daily/weekly mood trends.
+
+🔹 Recommendations
+
+Not generic → tailored to that mood.
+
+Adds practical impact → not just “you’re sad,” but “do this to feel better.”
+
+9. Future Scope
+
+Connect to Instagram/YouTube APIs → fetch real usage automatically.
+
+Add machine learning sentiment classifier → better accuracy.
+
+Mobile app version → notifications + journaling.
+
+Integrate with wearables → detect stress via HR/steps.
